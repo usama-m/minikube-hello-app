@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-app-minikube-deployment
+spec:
+  selector:
+    matchLabels:
+      app: hello-app-minikube
+  template:
+    metadata:
+      labels:
+        app: hello-app-minikube
+    spec:
+      containers:
+      - name: hello-app-google-sample
+        image: gcr.io/google-samples/hello-app:2.0
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: 200m
+          #limits:
+            #cpu: 400m
