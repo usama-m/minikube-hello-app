@@ -66,4 +66,50 @@ STATUS: deployed
 REVISION: 1
 TEST SUITE: None
 ```
+10) Helm upgrade worked fine:
+```
+$ helm upgrade hello-app ./hello-app
+Release "hello-app" has been upgraded. Happy Helming!
+NAME: hello-app
+LAST DEPLOYED: Fri Oct  1 10:46:28 2021
+NAMESPACE: default
+STATUS: deployed
+REVISION: 3
+TEST SUITE: None
+```
+11) Enabled the metrics server: 
+```
+$ minikube addons enable metrics-server
+ ▪ Using image k8s.gcr.io/metrics-server/metrics-server:v0.4.2
+🌟  The 'metrics-server' addon is enabled
+```
+12) In another tab, started sending requests for increasiong the load:
+```
+$ ab -c 5 -n 1000 -t 100000 http://192.168.49.2:31852/
+This is ApacheBench, Version 2.3 <$Revision: 1843412 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
 
+Benchmarking 192.168.49.2 (be patient)
+Completed 5000 requests
+Completed 10000 requests
+Completed 15000 requests
+Completed 20000 requests
+Completed 25000 requests
+Completed 30000 requests
+Completed 35000 requests
+Completed 40000 requests
+Completed 45000 requests
+Completed 50000 requests
+Finished 50000 requests
+```
+12) Increase in CPU utilization can be confirmed:
+```
+$ kubectl top node
+NAME       CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%   
+minikube   675m         33%    830Mi           21%       
+
+$ kubectl top node
+NAME       CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%   
+minikube   1139m        56%    831Mi           21% 
+```
